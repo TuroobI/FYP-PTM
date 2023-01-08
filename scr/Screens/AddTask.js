@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button } from 'react-native';
+import { View, TextInput, Button, Text } from 'react-native';
 import { StyleSheet } from 'react-native';
+import CheckBox from 'expo-checkbox';
 
 const AddTask = ({ onAdd }) => {
+  
   const [taskName, setTaskName] = useState('');
+  const [isImportant, setIsImportant] = useState(false);
+  const [isUrgent, setIsUrgent] = useState(false);
 
   const onChangeText = (text) => setTaskName(text);
 
   const onPress = () => {
-    onAdd(taskName);
+    onAdd(taskName, isImportant, isUrgent);
     setTaskName('');
+    setIsImportant(false);
+    setIsUrgent(false);
   };
 
   return (
@@ -20,6 +26,10 @@ const AddTask = ({ onAdd }) => {
         onChangeText={onChangeText}
         placeholder="Enter task name"
       />
+      <CheckBox value={isImportant} onValueChange={setIsImportant} />
+      <Text>Important</Text>
+      <CheckBox value={isUrgent} onValueChange={setIsUrgent} />
+      <Text>Urgent</Text>
       <Button title="Add" onPress={onPress} />
     </View>
   );

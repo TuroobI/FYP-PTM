@@ -8,6 +8,7 @@ import CreateaccPage from '../scr/Screens/CreateaccPage'
 import Calendar from '../scr/Screens/Calendar'
 import ProfileScreen from '../scr/Screens/ProfileScreen'
 import TasksScreen from '../scr/Screens/TaskScreen'
+import LoadingScreen from '../scr/Screens/LoadingScreen'
 
 const Tab = createBottomTabNavigator();
 const BottomTabNavigator = () => {
@@ -18,7 +19,7 @@ const BottomTabNavigator = () => {
                     height:65,
                     justifyContent:"center",
                     paddingVertical:15,
-                    backgroundColor:"rgba(33,173,216,1)",
+                    backgroundColor:"#061b22",
                     elevation:2
                 }
             }}
@@ -76,8 +77,8 @@ const HomeStackNavigator = () => {
     return(
         <Stack.Navigator screenOptions={screenOptionStyle}>
             <Stack.Screen name="Home" component={BottomTabNavigator}/>
-            <Stack.Screen name="LoginPage" component={BottomTabNavigator}/>
-            <Stack.Screen name="CreateaccPage" component={BottomTabNavigator}/>
+            <Stack.Screen name="LoginPage" component={LoginPage}/>
+            <Stack.Screen name="CreateaccPage" component={CreateaccPage}/>
             <Stack.Screen name="Calendar" component={Calendar}/>
         </Stack.Navigator>
     )

@@ -8,6 +8,7 @@ import CreateaccPage from "./scr/Screens/CreateaccPage";
 import LoginPage from "./scr/Screens/LoginPage";
 import Calendar from "./scr/Screens/Calendar";
 import HomeStackNavigator from "./navigation/Navigator";
+import LoadingScreen from "./scr/Screens/LoadingScreen";
 
 const Stack = createStackNavigator();
 
@@ -15,8 +16,7 @@ class App extends React.Component {
   render() {
     return (
       <NavigationContainer>
-        <HomeStackNavigator>
-        </HomeStackNavigator>
+        <LoadingScreen/>
       </NavigationContainer>
     );
   }

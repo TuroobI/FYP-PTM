@@ -22,7 +22,7 @@ class CreateaccPage extends React.Component{
         placeholder="Password" />
 
 
-<TouchableOpacity style={styles.signup} onPress={()=>this.props.navigation.navigate('Calendar')}>
+<TouchableOpacity style={styles.signup} onPress={()=>this.props.navigation.navigate('Calendarr')}>
           <Text style={styles.signuptext}>Sign Up</Text> 
         </TouchableOpacity>
         </View> 

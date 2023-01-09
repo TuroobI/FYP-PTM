@@ -17,7 +17,7 @@ class LoginPage extends React.Component{
         placeholder="Password" />
 
 
-<TouchableOpacity style={styles.signin} onPress={()=> this.props.navigation.navigate('Calendar')}>
+<TouchableOpacity style={styles.signin} onPress={()=> this.props.navigation.navigate('Calendarr')}>
           <Text style={styles.signintext}>Sign In</Text> 
         </TouchableOpacity>
 

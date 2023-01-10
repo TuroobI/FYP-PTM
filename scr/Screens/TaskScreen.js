@@ -7,11 +7,14 @@ const TasksScreen = () => {
   const [tasks, setTasks] = useState([]);
 
   const onAdd = (taskName, isImportant, isUrgent) => {
-    let priority = 3;
+    let priority = 4;
     if (isImportant && isUrgent) {
       priority = 1;
-    } else if (isImportant || isUrgent) {
+    } else if (isUrgent && !isImportant)  {
       priority = 2;
+    }
+    else if (isImportant && !isUrgent)  {
+      priority = 3; 
     }
     // Sort tasks array based on priority
     const sortedTasks = [...tasks, { taskName, priority }].sort((a, b) => a.priority - b.priority);

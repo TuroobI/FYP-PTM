@@ -5,9 +5,10 @@ import Home from '../scr/Screens/Home'
 import {Image} from 'react-native'
 import LoginPage from '../scr/Screens/LoginPage'
 import CreateaccPage from '../scr/Screens/CreateaccPage'
-import Calendarr from '../scr/Screens/Calendar'
+import Calendar from '../scr/Screens/Calendar'
 import ProfileScreen from '../scr/Screens/ProfileScreen'
 import TasksScreen from '../scr/Screens/TaskScreen'
+import LoadingScreen from '../scr/Screens/LoadingScreen'
 
 const Tab = createBottomTabNavigator();
 const BottomTabNavigator = () => {
@@ -78,7 +79,7 @@ const HomeStackNavigator = () => {
             <Stack.Screen name="Home" component={BottomTabNavigator}/>
             <Stack.Screen name="LoginPage" component={LoginPage}/>
             <Stack.Screen name="CreateaccPage" component={CreateaccPage}/>
-            <Stack.Screen name="Calendarr" component={Calendarr}/>
+            <Stack.Screen name="Calendar" component={Calendar}/>
         </Stack.Navigator>
     )
 }

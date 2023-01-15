@@ -1,5 +1,6 @@
 import React from "react";
 import {View, Text, StyleSheet, TextInput, TouchableOpacity} from 'react-native';
+import Calendarr from "./Calendar";
 
 
 class LoginPage extends React.Component{

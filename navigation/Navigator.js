@@ -9,9 +9,24 @@ import Calendarr from "../scr/Screens/Calendar";
 import ProfileScreen from "../scr/Screens/ProfileScreen";
 import TasksScreen from "../scr/Screens/TaskScreen";
 import LoadingScreen from "../scr/Screens/LoadingScreen";
+import LoginScreen from "../scr/Screens/LoginScreen";
+import HomeScreen from "../scr/Screens/HomeScreen";
+//import { auth } from "../../Firebase";
 
 const Tab = createBottomTabNavigator();
 const BottomTabNavigator = () => {
+  
+    // const unsubscribe = auth.onAuthStateChanged((user) => {
+    //   if (user) {
+    //     var name = "Home";
+    //     var component = {Home}
+    //   }
+    //   else{
+    //     var name = {HomeScreen};
+    //     var component = {HomeScreen}
+    //   }
+    // });
+
   return (
     <Tab.Navigator
       tabBarOptions={{
@@ -89,7 +104,8 @@ const HomeStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
       <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="LoginPage" component={LoginPage} />
+      <Stack.Screen name="LoginScreen" component={LoginScreen} />
+      <Stack.Screen name="HomeScreen" component={HomeScreen} />
       <Stack.Screen name="CreateaccPage" component={CreateaccPage} />
       <Stack.Screen name="Calendarr" component={BottomTabNavigator} />
     </Stack.Navigator>

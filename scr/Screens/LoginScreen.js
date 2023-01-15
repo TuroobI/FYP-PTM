@@ -1,7 +1,6 @@
-import { useNavigation } from "@react-navigation/core";
+//import { useNavigation } from "@react-navigation/core";
 import React, { useEffect, useState } from "react";
 import {
-  KeyboardAvoidingView,
   StyleSheet,
   Text,
   TextInput,
@@ -9,32 +8,24 @@ import {
   View,
 } from "react-native";
 import { auth } from "../../Firebase";
+import { withNavigation } from "@react-navigation/core";
+import Calendarr from "./Calendar";
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const navigation = useNavigation();
+  // const navigation = useNavigation();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        navigation.replace("Home");
+        navigation.replace("HomeScreen");
       }
     });
 
     return unsubscribe;
   }, []);
-
-  const handleSignUp = () => {
-    auth
-      .createUserWithEmailAndPassword(email, password)
-      .then((userCredentials) => {
-        const user = userCredentials.user;
-        console.log("Registered with:", user.email);
-      })
-      .catch((error) => alert(error.message));
-  };
 
   const handleLogin = () => {
     auth
@@ -44,86 +35,80 @@ const LoginScreen = () => {
         console.log("Logged in with:", user.email);
       })
       .catch((error) => alert(error.message));
+      const unsubscribe = auth.onAuthStateChanged((user) => {
+        if (user) {
+          navigation.replace("Calendarr")
+        }
+      });
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior="padding">
-      <View style={styles.inputContainer}>
-        <TextInput
-          placeholder="Email"
-          value={email}
-          onChangeText={(text) => setEmail(text)}
-          style={styles.input}
-        />
-        <TextInput
-          placeholder="Password"
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-          style={styles.input}
-          secureTextEntry
-        />
-      </View>
-
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={handleLogin} style={styles.button}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={handleSignUp}
-          style={[styles.button, styles.buttonOutline]}
-        >
-          <Text style={styles.buttonOutlineText}>Register</Text>
-        </TouchableOpacity>
-      </View>
-    </KeyboardAvoidingView>
+    <View style={styles.container}>
+      <Text style={styles.welcome}> Welcome Back </Text>
+      <TextInput style={styles.emailinput} placeholder="Email" value={email}
+      onChangeText={(text) => setEmail(text)}/>
+      
+      <TextInput style={styles.passinput} placeholder="Password" value={password}
+      onChangeText={(text) => setPassword(text)} />
+     
+      <TouchableOpacity
+        style={styles.signin}
+        onPress={handleLogin}>
+        <Text style={styles.signintext}>Sign In</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
 export default LoginScreen;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    backgroundColor: "#fff",
     alignItems: "center",
+    justifyContent: "center",
   },
-  inputContainer: {
+  welcome: {
+    fontSize: 25,
+    fontStyle: "italic",
+    fontFamily: "sans-serif-medium",
+    color: "Black",
+  },
+
+  emailinput: {
+    marginTop: 150,
+    borderBottomColor: "#9370db",
+    borderBottomWidth: 2,
+    paddingHorizontal: 8,
+    paddingVertical: 5,
+    height: 50,
+    width: 250,
+  },
+  passinput: {
+    marginTop: 50,
+    borderWidth: 0,
+    borderBottomColor: "#9370db",
+    borderBottomWidth: 2,
+    paddingHorizontal: 8,
+    paddingVertical: 5,
+    height: 50,
+    width: 250,
+  },
+  signin: {
     width: "80%",
-  },
-  input: {
-    backgroundColor: "white",
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderRadius: 10,
-    marginTop: 5,
-  },
-  buttonContainer: {
-    width: "60%",
+    borderRadius: 25,
+    borderColor: "#1e90ff",
+    height: 50,
+    alignItems: "center",
     justifyContent: "center",
-    alignItems: "center",
-    marginTop: 40,
+    marginTop: 100,
+    backgroundColor: "#9370db",
   },
-  button: {
-    backgroundColor: "#0782F9",
-    width: "100%",
-    padding: 15,
-    borderRadius: 10,
-    alignItems: "center",
-  },
-  buttonOutline: {
-    backgroundColor: "white",
-    marginTop: 5,
-    borderColor: "#0782F9",
-    borderWidth: 2,
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "700",
-    fontSize: 16,
-  },
-  buttonOutlineText: {
-    color: "#0782F9",
-    fontWeight: "700",
-    fontSize: 16,
+
+  signintext: {
+    fontSize: 25,
+    fontStyle: "italic",
+    fontFamily: "sans-serif-medium",
+    color: "#fff",
   },
 });

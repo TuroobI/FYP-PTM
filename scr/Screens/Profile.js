@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
+import { auth } from "../../Firebase";
 
 const Profile = ({ profile }) => {
   return (
@@ -51,7 +52,7 @@ const styles = StyleSheet.create({
 
 export const profile = {
     avatar: 'https://www.logomyway.com/logos_new/11812/a3_307111737174.jpg',
-    name: 'Aisha',
+    name: auth.currentUser?.email,
     interests: ['photography', 'hiking', 'travel'],
   };
 

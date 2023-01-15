@@ -1,88 +1,99 @@
-import React from 'react'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { createStackNavigator } from '@react-navigation/stack'
-import Home from '../scr/Screens/Home'
-import {Image} from 'react-native'
-import LoginPage from '../scr/Screens/LoginPage'
-import CreateaccPage from '../scr/Screens/CreateaccPage'
-import Calendar from '../scr/Screens/Calendar'
-import ProfileScreen from '../scr/Screens/ProfileScreen'
-import TasksScreen from '../scr/Screens/TaskScreen'
-import LoadingScreen from '../scr/Screens/LoadingScreen'
+import React from "react";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createStackNavigator } from "@react-navigation/stack";
+import Home from "../scr/Screens/Home";
+import { Image } from "react-native";
+import LoginPage from "../scr/Screens/LoginPage";
+import CreateaccPage from "../scr/Screens/CreateaccPage";
+import Calendarr from "../scr/Screens/Calendar";
+import ProfileScreen from "../scr/Screens/ProfileScreen";
+import TasksScreen from "../scr/Screens/TaskScreen";
+import LoadingScreen from "../scr/Screens/LoadingScreen";
 
 const Tab = createBottomTabNavigator();
 const BottomTabNavigator = () => {
-    return(
-        <Tab.Navigator
-            tabBarOptions={{
-                style:{
-                    height:65,
-                    justifyContent:"center",
-                    paddingVertical:15,
-                    backgroundColor:"#061b22",
-                    elevation:2
-                }
-            }}
-        >
-            <Tab.Screen
-                name="Home"
-                component={Home}
-                options={{
-                    tabBarLabel:"",
-                    tabBarIcon:({color, size}) => (
-                        <Image
-                            source={require("./images/Home.png")}
-                            style={{ height:20, width:20 }}
-                        />
-                    )
-                }}
+  return (
+    <Tab.Navigator
+      tabBarOptions={{
+        style: {
+          height: 65,
+          justifyContent: "center",
+          paddingVertical: 15,
+          backgroundColor: "#061b22",
+          elevation: 2,
+        },
+      }}
+    >
+      <Tab.Screen
+        name="Calendarr"
+        component={Calendarr}
+        options={{
+          tabBarLabel: "",
+          tabBarIcon: ({ color, size }) => (
+            <Image
+              source={require("./images/images.png")}
+              style={{ height: 20, width: 20 }}
             />
-            <Tab.Screen
-                name="ProfileScreen"
-                component={ProfileScreen}
-                options={{
-                    tabBarLabel:"",
-                    tabBarIcon:({color, size}) => (
-                        <Image
-                            source={require("./images/Profile.png")}
-                            style={{ height:20, width:20 }}
-                        />
-                    )
-                }}
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Home"
+        component={Home}
+        options={{
+          tabBarLabel: "",
+          tabBarIcon: ({ color, size }) => (
+            <Image
+              source={require("./images/Home.png")}
+              style={{ height: 20, width: 20 }}
             />
-            <Tab.Screen
-                name="TasksScreen"
-                component={TasksScreen}
-                options={{
-                    tabBarLabel:"",
-                    tabBarIcon:({color, size}) => (
-                        <Image
-                            source={require("./images/add.jpg")}
-                            style={{ height:20, width:20 }}
-                        />
-                    )
-                }}
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="ProfileScreen"
+        component={ProfileScreen}
+        options={{
+          tabBarLabel: "",
+          tabBarIcon: ({ color, size }) => (
+            <Image
+              source={require("./images/Profile.png")}
+              style={{ height: 20, width: 20 }}
             />
-        </Tab.Navigator>
-    );
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="TasksScreen"
+        component={TasksScreen}
+        options={{
+          tabBarLabel: "",
+          tabBarIcon: ({ color, size }) => (
+            <Image
+              source={require("./images/add.jpg")}
+              style={{ height: 20, width: 20 }}
+            />
+          ),
+        }}
+      />
+    </Tab.Navigator>
+  );
 };
-
 
 const Stack = createStackNavigator();
 const screenOptionStyle = {
-    headerShown: false
-}
+  headerShown: false,
+};
 
 const HomeStackNavigator = () => {
-    return(
-        <Stack.Navigator screenOptions={screenOptionStyle}>
-            <Stack.Screen name="Home" component={BottomTabNavigator}/>
-            <Stack.Screen name="LoginPage" component={LoginPage}/>
-            <Stack.Screen name="CreateaccPage" component={CreateaccPage}/>
-            <Stack.Screen name="Calendar" component={Calendar}/>
-        </Stack.Navigator>
-    )
-}
-
+  return (
+    <Stack.Navigator screenOptions={screenOptionStyle}>
+      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="LoginPage" component={LoginPage} />
+      <Stack.Screen name="CreateaccPage" component={CreateaccPage} />
+      <Stack.Screen name="Calendarr" component={BottomTabNavigator} />
+    </Stack.Navigator>
+  );
+};
 
 export default HomeStackNavigator;

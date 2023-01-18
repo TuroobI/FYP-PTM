@@ -3,6 +3,8 @@ import { View, TextInput, Button, Text } from "react-native";
 import { StyleSheet } from "react-native";
 import CheckBox from "expo-checkbox";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import * as Notifications from 'expo-notifications';
+import * as Permissions from 'expo-permissions';
 
 const AddTask = ({ onAdd }) => {
   const [taskName, setTaskName] = useState("");
@@ -15,7 +17,31 @@ const AddTask = ({ onAdd }) => {
 
   const onChangeText = (text) => setTaskName(text);
 
-  const onPress = () => {
+  const onPress = async () => {
+    const { status } =  await Permissions.askAsync(Permissions.NOTIFICATIONS);
+    if (status === 'granted') {
+      const localNotification = {
+        title: `Task Deadline: ${taskName}`,
+        body: `The deadline for your task "${taskName}" is approaching.`,
+      };
+  
+      const schedulingOptions = {
+        time: new Date(
+          date.getFullYear(),
+          date.getMonth(),
+          date.getDate(),
+          time.getHours(),
+          time.getMinutes()
+        ),
+      };
+  
+      await Notifications.scheduleNotificationAsync({
+        content: localNotification,
+        trigger: schedulingOptions
+      });
+    } else {
+      alert('You need to enable notifications in order to receive deadline reminders.');
+    }
     onAdd(taskName, isImportant, isUrgent, date, time);
     setTaskName("");
     setIsImportant(false);
@@ -25,6 +51,7 @@ const AddTask = ({ onAdd }) => {
     setShowDatePicker(false);
     setShowTimePicker(false);
   };
+
 
   return (
     <View>

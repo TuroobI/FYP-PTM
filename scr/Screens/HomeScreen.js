@@ -3,6 +3,8 @@ import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { auth } from "../../Firebase";
 import { withNavigation } from "@react-navigation/core";
+import CustomHeader from './CustomHeader';
+import Hometwo from "./Hometwo";
 
 const HomeScreen = ({navigation}) => {
   //const navigation = useNavigation();
@@ -11,7 +13,7 @@ const HomeScreen = ({navigation}) => {
     auth
       .signOut()
       .then(() => {
-        navigation.replace("LoginScreen");
+        navigation.replace("Hometwo");
       })
       .catch((error) => alert(error.message));
   };
@@ -25,7 +27,11 @@ const HomeScreen = ({navigation}) => {
     </View>
   );
 };
-
+HomeScreen.navigationOptions = ({ navigation }) => {
+  return {
+    header: () => <CustomHeader navigation={navigation} />
+  };
+};
 export default HomeScreen;
 
 const styles = StyleSheet.create({

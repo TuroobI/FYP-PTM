@@ -24,7 +24,7 @@ const CreateaccPage = ({ navigation }) => {
       .catch((error) => alert(error.message));
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        navigation.replace("Calendarr");
+        navigation.replace("CalendarScreen");
       }
     });
   };
@@ -69,9 +69,10 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
     fontFamily: "sans-serif-medium",
     color: "Black",
+    marginTop: 50,
   },
   nameinput: {
-    marginTop: 150,
+    marginTop: 100,  //reduce the marginTop value
     borderBottomColor: "#9370db",
     borderBottomWidth: 2,
     paddingHorizontal: 8,
@@ -106,7 +107,7 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 100,
+    marginTop: 30,
     backgroundColor: "#9370db",
   },
 
@@ -117,3 +118,4 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
 });
+

@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { auth } from "../../Firebase";
 import { withNavigation } from "@react-navigation/core";
-import Calendarr from "./Calendar";
+import CalendarScreen from "./Calendar";
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -35,25 +35,31 @@ const LoginScreen = ({ navigation }) => {
         console.log("Logged in with:", user.email);
       })
       .catch((error) => alert(error.message));
-      const unsubscribe = auth.onAuthStateChanged((user) => {
-        if (user) {
-          navigation.replace("Calendarr")
-        }
-      });
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        navigation.replace("CalendarScreen");
+      }
+    });
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.welcome}> Welcome Back </Text>
-      <TextInput style={styles.emailinput} placeholder="Email" value={email}
-      onChangeText={(text) => setEmail(text)}/>
-      
-      <TextInput style={styles.passinput} placeholder="Password" value={password}
-      onChangeText={(text) => setPassword(text)} />
-     
-      <TouchableOpacity
-        style={styles.signin}
-        onPress={handleLogin}>
+      <TextInput
+        style={styles.emailinput}
+        placeholder="Email"
+        value={email}
+        onChangeText={(text) => setEmail(text)}
+      />
+
+      <TextInput
+        style={styles.passinput}
+        placeholder="Password"
+        value={password}
+        onChangeText={(text) => setPassword(text)}
+      />
+
+      <TouchableOpacity style={styles.signin} onPress={handleLogin}>
         <Text style={styles.signintext}>Sign In</Text>
       </TouchableOpacity>
     </View>

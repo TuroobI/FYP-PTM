@@ -1,8 +1,18 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect } from "react";
 import { View, Text } from "react-native";
 import AddTask from "./AddTask";
-
-const TasksScreen = () => {
+import * as Permissions from 'expo-permissions';
+import CustomHeader from './CustomHeader';
+const TasksScreen = ({ navigation }) => {
+  useEffect(() => {
+    async function requestPermission() {
+      const { status } =  await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      if (status !== 'granted') {
+        alert('You need to enable notifications in order to receive deadline reminders.');
+      }
+    }
+    requestPermission();
+  }, []);
   const [tasks, setTasks] = useState([]);
   
   const onAdd = (taskName, isImportant, isUrgent, date, time) => {
@@ -51,5 +61,9 @@ const TasksScreen = () => {
   </View>
   );
   };
-  
+  TasksScreen.navigationOptions = ({ navigation }) => {
+    return {
+      header: () => <CustomHeader navigation={navigation} />
+    };
+  };
   export default TasksScreen;

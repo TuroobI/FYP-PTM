@@ -1,15 +1,15 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, Button} from 'react-native';
-import CalendarPicker from 'react-native-calendar-picker';
-import * as Calendar from 'expo-calendar';
+import { StatusBar } from "expo-status-bar";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Text, View, TextInput, Button } from "react-native";
+import CalendarPicker from "react-native-calendar-picker";
+import * as Calendar from "expo-calendar";
 
 async function getDefaultCalendarSource() {
   const calendars = await Calendar.getCalendarsAsync(
     Calendar.EntityTypes.EVENT
   );
   const defaultCalendars = calendars.filter(
-    (each) => each.source.name === 'Default'
+    (each) => each.source.name === "Default"
   );
   return defaultCalendars.length
     ? defaultCalendars[0].source
@@ -18,86 +18,85 @@ async function getDefaultCalendarSource() {
 
 async function createCalendar() {
   const defaultCalendarSource =
-    Platform.OS === 'ios'
+    Platform.OS === "ios"
       ? await getDefaultCalendarSource()
-      : { isLocalAccount: true, name: 'Expo Calendar' };
+      : { isLocalAccount: true, name: "Expo Calendar" };
   const newCalendarID = await Calendar.createCalendarAsync({
-    title: 'Expo Calendar',
-    color: 'blue',
+    title: "Expo Calendar",
+    color: "blue",
     entityType: Calendar.EntityTypes.EVENT,
     sourceId: defaultCalendarSource.id,
     source: defaultCalendarSource,
-    name: 'internalCalendarName',
-    ownerAccount: 'personal',
+    name: "internalCalendarName",
+    ownerAccount: "personal",
     accessLevel: Calendar.CalendarAccessLevel.OWNER,
   });
   console.log(`Your new calendar ID is: ${newCalendarID}`);
   return newCalendarID;
 }
-const Calendarr = () => {
-const addNewEvent = async () => {
-  try {
-    const calendarId = await createCalendar();
-    
-    const res = await Calendar.createEventAsync(calendarId, {
-      endDate: getAppointementDate(startDate),
-      startDate: getAppointementDate(startDate),
-      title: 'Happy Birthday buddy ' + friendNameText,
-    });
-    console.log('Event Created!');
-  } catch (e) {
-    console.log(e);
-  }
-};
-const [selectedStartDate, setSelectedStartDate] = useState(null);
-const [friendNameText, setFriendNameText] = useState('');
-const startDate = selectedStartDate
-  ? selectedStartDate.format('YYYY-MM-DD').toString()
-  : ''; 
+const CalendarScreen = () => {
+  const addNewEvent = async () => {
+    try {
+      const calendarId = await createCalendar();
+
+      const res = await Calendar.createEventAsync(calendarId, {
+        endDate: getAppointementDate(startDate),
+        startDate: getAppointementDate(startDate),
+        title: "Happy Birthday buddy " + friendNameText,
+      });
+      console.log("Event Created!");
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const [selectedStartDate, setSelectedStartDate] = useState(null);
+  const [friendNameText, setFriendNameText] = useState("");
+  const startDate = selectedStartDate
+    ? selectedStartDate.format("YYYY-MM-DD").toString()
+    : "";
   useEffect(() => {
     (async () => {
       const { status } = await Calendar.requestCalendarPermissionsAsync();
-      if (status === 'granted') {
+      if (status === "granted") {
         const calendars = await Calendar.getCalendarsAsync(
           Calendar.EntityTypes.EVENT
         );
-        console.log('Here are all your calendars:');
+        console.log("Here are all your calendars:");
         console.log({ calendars });
       }
     })();
   }, []);
-return (
-  <View style={styles.container}>
-    <StatusBar style="auto" />
-    <TextInput
-      onChangeText={setFriendNameText}
-      value={friendNameText}
-      placeholder="Enter the name of your friend"
-      style={styles.input}
-    />
-    <CalendarPicker onDateChange={setSelectedStartDate} />
-    <Text style={styles.dateText}>Birthday: {startDate}</Text>
-    <Button title={'Add to calendar'} onPress={addNewEvent} />
-  </View>
-  
-);
-}
+  return (
+    <View style={styles.container}>
+      <StatusBar style="auto" />
+      <TextInput
+        onChangeText={setFriendNameText}
+        value={friendNameText}
+        placeholder="Enter the name of your friend"
+        style={styles.input}
+      />
+      <CalendarPicker onDateChange={setSelectedStartDate} />
+      <Text style={styles.dateText}>Birthday: {startDate}</Text>
+      <Button title={"Add to calendar"} onPress={addNewEvent} />
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
   input: {
-    height: 40,
+    height: 25,
     margin: 12,
     borderWidth: 1,
   },
   dateText: {
-    margin: 16,
+    margin: 10,
   },
 });
 
-export default Calendarr;
+export default CalendarScreen;

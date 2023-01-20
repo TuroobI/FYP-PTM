@@ -1,69 +1,70 @@
 import React, { useState ,useEffect } from "react";
+import { ScrollView } from "react-native";
 import { View, Text } from "react-native";
 import AddTask from "./AddTask";
 import * as Permissions from 'expo-permissions';
 import CustomHeader from './CustomHeader';
+
 const TasksScreen = ({ navigation }) => {
   useEffect(() => {
-    async function requestPermission() {
-      const { status } =  await Permissions.askAsync(Permissions.NOTIFICATIONS);
-      if (status !== 'granted') {
-        alert('You need to enable notifications in order to receive deadline reminders.');
-      }
-    }
-    requestPermission();
+
   }, []);
   const [tasks, setTasks] = useState([]);
-  
-  const onAdd = (taskName, isImportant, isUrgent, date, time) => {
-  let priority = 4;
-  if (isImportant && isUrgent) {
-  priority = 1;
-  } else if (isUrgent && !isImportant) {
-  priority = 2;
-  } else if (isImportant && !isUrgent) {
-  priority = 3;
-  }
-  // Sort tasks array based on deadline and priority
-  const sortedTasks = [
-  ...tasks,
-  { taskName, priority, date, time },
-  ].sort((a, b) => {
-  const deadlineA = new Date(
-  a.date.toDateString() + " " + a.time.toLocaleTimeString()
-  );
-  const deadlineB = new Date(
-  b.date.toDateString() + " " + b.time.toLocaleTimeString()
-  );
-  if (deadlineA < deadlineB) {
-  return -1;
-  } else if (deadlineA > deadlineB) {
-  return 1;
-  } else {
-  return a.priority - b.priority;
-  }
-  });
-  // Add task to tasks array with priority and deadline
-  setTasks(sortedTasks);
+
+  const onAdd = (taskName, isImportant, isUrgent, startTime, endTime) => {
+    let priority = 4;
+    if (isImportant && isUrgent) {
+      priority = 1;
+    } else if (isUrgent && !isImportant) {
+      priority = 3;
+    } else if (isImportant && !isUrgent) {
+      priority = 2;
+    }
+    //const startTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), time.getHours(), time.getMinutes());
+    //const endTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), time.getHours(), time.getMinutes());
+    let duration = (endTime - startTime)/60000;
+    let totalDuration = 0;
+    for(let i = 0 ; i < tasks.length ; i++){
+      totalDuration += tasks[i].duration;
+    }
+    if(totalDuration + duration > 720){
+      alert('Total duration should be less than 12 hours');
+      return;
+    }
+    const sortedTasks = [
+      ...tasks,
+      { taskName, priority, duration, startTime, endTime },
+    ].sort((a, b) => {
+      if (a.startTime < b.startTime) {
+        return -1;
+      } else if (a.startTime > b.startTime) {
+        return 1;
+      } else {
+        return a.priority - b.priority;
+      }
+    });
+    setTasks(sortedTasks);
   };
-  
+
   return (
-  <View>
-  <AddTask onAdd={onAdd} />
-  {tasks.map((task, index) => (
-  <View key={index}>
-  <Text>{task.taskName}</Text>
-  <Text>
-  Deadline: {task.date.toDateString()} {task.time.toLocaleTimeString()}
-  </Text>
-  </View>
-  ))}
-  </View>
+    <ScrollView style={{height: '100%', width: '100%'}}>
+    <View>
+      <AddTask onAdd={onAdd} />
+      {tasks.map((task, index) => (
+        <View key={index}>
+          <Text>{task.taskName}</Text>
+          <Text>Duration: {task.duration} minutes</Text>
+          <Text>
+            Start Time: {task.startTime.toLocaleString()}
+          </Text>
+          <Text>
+            End Time: {task.endTime.toLocaleString()}
+          </Text>
+        </View>
+      ))}
+    </View>
+    </ScrollView>
   );
-  };
-  TasksScreen.navigationOptions = ({ navigation }) => {
-    return {
-      header: () => <CustomHeader navigation={navigation} />
-    };
-  };
-  export default TasksScreen;
+};
+
+export default TasksScreen;

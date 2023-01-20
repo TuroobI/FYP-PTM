@@ -3,6 +3,7 @@ import { View, TextInput, Button, Text } from "react-native";
 import { StyleSheet } from "react-native";
 import CheckBox from "expo-checkbox";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { ScrollView } from "react-native";
 import * as Notifications from 'expo-notifications';
 import * as Permissions from 'expo-permissions';
 
@@ -10,50 +11,27 @@ const AddTask = ({ onAdd }) => {
   const [taskName, setTaskName] = useState("");
   const [isImportant, setIsImportant] = useState(false);
   const [isUrgent, setIsUrgent] = useState(false);
-  const [date, setDate] = useState(new Date());
-  const [time, setTime] = useState(new Date());
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [showTimePicker, setShowTimePicker] = useState(false);
+  const [startTime, setStartTime] = useState(new Date());
+  const [endTime, setEndTime] = useState(new Date());
+  const [showStartTimePicker, setShowStartTimePicker] = useState(false);
+  const [showEndTimePicker, setShowEndTimePicker] = useState(false);
 
   const onChangeText = (text) => setTaskName(text);
 
-  const onPress = async () => {
-    const { status } =  await Permissions.askAsync(Permissions.NOTIFICATIONS);
-    if (status === 'granted') {
-      const localNotification = {
-        title: `Task Deadline: ${taskName}`,
-        body: `The deadline for your task "${taskName}" is approaching.`,
-      };
-  
-      const schedulingOptions = {
-        time: new Date(
-          date.getFullYear(),
-          date.getMonth(),
-          date.getDate(),
-          time.getHours(),
-          time.getMinutes()
-        ),
-      };
-  
-      await Notifications.scheduleNotificationAsync({
-        content: localNotification,
-        trigger: schedulingOptions
-      });
-    } else {
-      alert('You need to enable notifications in order to receive deadline reminders.');
-    }
-    onAdd(taskName, isImportant, isUrgent, date, time);
+  const onPress =  () => {
+    //const duration = endTime - startTime;
+    onAdd(taskName, isImportant, isUrgent, startTime, endTime);
     setTaskName("");
     setIsImportant(false);
     setIsUrgent(false);
-    setDate(new Date());
-    setTime(new Date());
-    setShowDatePicker(false);
-    setShowTimePicker(false);
+    setStartTime(new Date());
+    setEndTime(new Date());
+    setShowStartTimePicker(false);
+    setShowEndTimePicker(false);
   };
 
-
   return (
+    
     <View>
       <TextInput
         style={styles.input}
@@ -65,29 +43,29 @@ const AddTask = ({ onAdd }) => {
       <Text>Important</Text>
       <CheckBox value={isUrgent} onValueChange={setIsUrgent} />
       <Text>Urgent</Text>
-      <Button title="Select deadline" onPress={() => setShowDatePicker(true)} />
-      {showDatePicker && (
+      <Button title="Select start time" onPress={() => setShowStartTimePicker(true)} />
+      {showStartTimePicker && (
         <DateTimePicker
-          value={date}
-          mode="date"
-          is24Hour={true}
-          display="default"
-          onChange={(event, selectedDate) => {
-            setShowDatePicker(false);
-            setDate(selectedDate);
-            setShowTimePicker(true);
-          }}
-        />
-      )}
-      {showTimePicker && (
-        <DateTimePicker
-          value={time}
+          value={startTime}
           mode="time"
           is24Hour={true}
           display="default"
-          onChange={(event, selectedTime) => {
-            setShowTimePicker(false);
-            setTime(selectedTime);
+          onChange={(event, selectedStartTime) => {
+            setShowStartTimePicker(false);
+            setStartTime(selectedStartTime);
+          }}
+        />
+      )}
+      <Button title="Select end time" onPress={() => setShowEndTimePicker(true)} />
+      {showEndTimePicker && (
+        <DateTimePicker
+          value={endTime}
+          mode="time"
+          is24Hour={true}
+          display="default"
+          onChange={(event, selectedEndTime) => {
+            setShowEndTimePicker(false);
+            setEndTime(selectedEndTime);
           }}
         />
       )}

@@ -1,43 +1,37 @@
-import React, { useState ,useEffect } from "react";
-import { ScrollView } from "react-native";
+import { duration } from "moment/moment";
+import React, { useState } from "react";
 import { View, Text } from "react-native";
 import AddTask from "./AddTask";
-import * as Permissions from 'expo-permissions';
-import CustomHeader from './CustomHeader';
 
-const TasksScreen = ({ navigation }) => {
-  useEffect(() => {
+import { ScrollView } from "react-native";
 
-  }, []);
+const TasksScreen = () => {
   const [tasks, setTasks] = useState([]);
+  let previousTaskEndTime = 12; // Assume previous task ended at 12pm
 
-  const onAdd = (taskName, isImportant, isUrgent, startTime, endTime) => {
+  const onAdd = (taskName, isImportant, isUrgent, date, time, duration) => {
     let priority = 4;
     if (isImportant && isUrgent) {
       priority = 1;
     } else if (isUrgent && !isImportant) {
       priority = 3;
     } else if (isImportant && !isUrgent) {
-      priority = 2;
+      priority = 4;
     }
-    //const startTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), time.getHours(), time.getMinutes());
-    //const endTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), time.getHours(), time.getMinutes());
-    let duration = (endTime - startTime)/60000;
-    let totalDuration = 0;
-    for(let i = 0 ; i < tasks.length ; i++){
-      totalDuration += tasks[i].duration;
-    }
-    if(totalDuration + duration > 720){
-      alert('Total duration should be less than 12 hours');
-      return;
-    }
+    // Sort tasks array based on deadline and priority
     const sortedTasks = [
       ...tasks,
-      { taskName, priority, duration, startTime, endTime },
+      { taskName, priority, date, time, duration },
     ].sort((a, b) => {
-      if (a.startTime < b.startTime) {
+      const deadlineA = new Date(
+        a.date.toDateString() + " " + a.time.toLocaleTimeString()
+      );
+      const deadlineB = new Date(
+        b.date.toDateString() + " " + b.time.toLocaleTimeString()
+      );
+      if (deadlineA < deadlineB) {
         return -1;
-      } else if (a.startTime > b.startTime) {
+      } else if (deadlineA > deadlineB) {
         return 1;
       } else {
         return a.priority - b.priority;
@@ -45,24 +39,36 @@ const TasksScreen = ({ navigation }) => {
     });
     setTasks(sortedTasks);
   };
+  // Function to calculate the available slots based on task duration and previous task end time
+  const calculateSlots = (duration, prevTaskEndTime) => {
+    let availableSlots = [];
+    let start = prevTaskEndTime;
+    // Loop through the slots array starting from the previous task end time
+    for (let i = 0; i < duration; i++) {
+      availableSlots.push(start++ + ":00");
+    }
+    previousTaskEndTime = start; // Update previous task end time
+    return availableSlots;
+  };
 
   return (
-    <ScrollView style={{height: '100%', width: '100%'}}>
-    <View>
-      <AddTask onAdd={onAdd} />
-      {tasks.map((task, index) => (
-        <View key={index}>
-          <Text>{task.taskName}</Text>
-          <Text>Duration: {task.duration} minutes</Text>
-          <Text>
-            Start Time: {task.startTime.toLocaleString()}
-          </Text>
-          <Text>
-            End Time: {task.endTime.toLocaleString()}
-          </Text>
-        </View>
-      ))}
-    </View>
+    <ScrollView style={{ height: "100%", width: "100%" }}>
+      <View>
+        <AddTask onAdd={onAdd} />
+        {tasks.map((task, index) => (
+          <View key={index}>
+            <Text>{task.taskName}</Text>
+            <Text>
+              Deadline: {task.date.toDateString()}{" "}
+              {task.time.toLocaleTimeString()}
+            </Text>
+            <Text>
+              Available slots:{" "}
+              {calculateSlots(task.duration, previousTaskEndTime)}
+            </Text>
+          </View>
+        ))}
+      </View>
     </ScrollView>
   );
 };

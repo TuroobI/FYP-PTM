@@ -11,7 +11,7 @@ async function getDefaultCalendarSource() {
   const defaultCalendars = calendars.filter(
     (each) => each.source.name === "Default"
   );
-  return defaultCalendars.length
+  return defaultCalendars.length2
     ? defaultCalendars[0].source
     : calendars[0].source;
 }
@@ -35,18 +35,19 @@ async function createCalendar() {
   return newCalendarID;
 }
 const CalendarScreen = () => {
-  const addNewEvent = async () => {
-    try {
-      const calendarId = await createCalendar();
-
-      const res = await Calendar.createEventAsync(calendarId, {
-        endDate: getAppointementDate(startDate),
-        startDate: getAppointementDate(startDate),
-        title: "Happy Birthday buddy " + friendNameText,
+  const addNewEvent =  () => {
+    conststate = { status: 'not requested' };
+    this.setState({ status: 'requesting permission' });
+    const { status } =  Permissions.askAsync(Permissions.CALENDAR);
+    if (status === 'granted') {
+      this.setState({ status: 'creating event' });
+      const eventId =  Calendar.createEventAsync(Calendar.DEFAULT, {
+        title: 'A brand new event',
+        startDate: moment('2018-05-11 10:30 a.m.', 'YYYY-MM-DD h:mm a'),
+        endDate: moment('2018-05-11 11:30 a.m.', 'YYYY-MM-DD h:mm a'),
+        timeZone: 'America/Phoenix',
       });
-      console.log("Event Created!");
-    } catch (e) {
-      console.log(e);
+      this.setState({ status: 'event created', eventId });
     }
   };
   const [selectedStartDate, setSelectedStartDate] = useState(null);

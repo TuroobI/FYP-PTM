@@ -3,35 +3,31 @@ import { View, TextInput, Button, Text } from "react-native";
 import { StyleSheet } from "react-native";
 import CheckBox from "expo-checkbox";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { ScrollView } from "react-native";
-import * as Notifications from 'expo-notifications';
-import * as Permissions from 'expo-permissions';
 
 const AddTask = ({ onAdd }) => {
   const [taskName, setTaskName] = useState("");
   const [isImportant, setIsImportant] = useState(false);
   const [isUrgent, setIsUrgent] = useState(false);
-  const [startTime, setStartTime] = useState(new Date());
-  const [endTime, setEndTime] = useState(new Date());
-  const [showStartTimePicker, setShowStartTimePicker] = useState(false);
-  const [showEndTimePicker, setShowEndTimePicker] = useState(false);
+  const [date, setDate] = useState(new Date());
+  const [time, setTime] = useState(new Date());
+  const [duration, setDuration] = useState("");
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showTimePicker, setShowTimePicker] = useState(false);
 
   const onChangeText = (text) => setTaskName(text);
 
-  const onPress =  () => {
-    //const duration = endTime - startTime;
-    onAdd(taskName, isImportant, isUrgent, startTime, endTime);
+  const onPress = () => {
+    onAdd(taskName, isImportant, isUrgent, date, time, duration);
     setTaskName("");
     setIsImportant(false);
     setIsUrgent(false);
-    setStartTime(new Date());
-    setEndTime(new Date());
-    setShowStartTimePicker(false);
-    setShowEndTimePicker(false);
+    setDate(new Date());
+    setTime(new Date());
+    setDuration("");
+    setShowDatePicker(false);
+    setShowTimePicker(false);
   };
-
   return (
-    
     <View>
       <TextInput
         style={styles.input}
@@ -43,29 +39,35 @@ const AddTask = ({ onAdd }) => {
       <Text>Important</Text>
       <CheckBox value={isUrgent} onValueChange={setIsUrgent} />
       <Text>Urgent</Text>
-      <Button title="Select start time" onPress={() => setShowStartTimePicker(true)} />
-      {showStartTimePicker && (
+      <TextInput
+        style={styles.input}
+        value={duration}
+        onChangeText={(text) => setDuration(text)}
+        placeholder="Enter task duration"
+      />
+      <Button title="Select deadline" onPress={() => setShowDatePicker(true)} />
+      {showDatePicker && (
         <DateTimePicker
-          value={startTime}
-          mode="time"
+          value={date}
+          mode="date"
           is24Hour={true}
           display="default"
-          onChange={(event, selectedStartTime) => {
-            setShowStartTimePicker(false);
-            setStartTime(selectedStartTime);
+          onChange={(event, selectedDate) => {
+            setShowDatePicker(false);
+            setDate(selectedDate);
+            setShowTimePicker(true);
           }}
         />
       )}
-      <Button title="Select end time" onPress={() => setShowEndTimePicker(true)} />
-      {showEndTimePicker && (
+      {showTimePicker && (
         <DateTimePicker
-          value={endTime}
+          value={time}
           mode="time"
           is24Hour={true}
           display="default"
-          onChange={(event, selectedEndTime) => {
-            setShowEndTimePicker(false);
-            setEndTime(selectedEndTime);
+          onChange={(event, selectedTime) => {
+            setShowTimePicker(false);
+            setTime(selectedTime);
           }}
         />
       )}
@@ -83,4 +85,5 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 });
+
 export default AddTask;

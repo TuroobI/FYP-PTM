@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
 export const profile = {
     avatar: 'https://www.logomyway.com/logos_new/11812/a3_307111737174.jpg',
     name: auth.currentUser?.email,
-    interests: ['photography', 'hiking', 'travel'],
+    interests: ['travel', 'bikes', 'sports'],
   };
 
 export default Profile;

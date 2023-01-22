@@ -7,6 +7,7 @@ import { ScrollView } from "react-native";
 
 const TasksScreen = () => {
   const [tasks, setTasks] = useState([]);
+  const [status, setStatus] = useState({});
   let previousTaskEndTime = 12; // Assume previous task ended at 12pm
 
   const onAdd = (taskName, isImportant, isUrgent, date, time, duration) => {
@@ -37,7 +38,20 @@ const TasksScreen = () => {
         return a.priority - b.priority;
       }
     });
+    setStatus({ ...status, [taskName]: "incomplete" });
     setTasks(sortedTasks);
+  };
+
+  const updateStatus = (taskName) => {
+    // logic to open a pop-up component for user to update task status
+    // ...
+    if (status[taskName] === "incomplete") {
+      setStatus({ ...status, [taskName]: "complete" });
+    } else if (status[taskName] === "complete") {
+      setStatus({ ...status, [taskName]: "not done" });
+    } else {
+      setStatus({ ...status, [taskName]: "incomplete" });
+    }
   };
   // Function to calculate the available slots based on task duration and previous task end time
   const calculateSlots = (duration, prevTaskEndTime) => {
@@ -57,11 +71,14 @@ const TasksScreen = () => {
         <AddTask onAdd={onAdd} />
         {tasks.map((task, index) => (
           <View key={index}>
-            <Text>{task.taskName}</Text>
+            <Text onPress={() => updateStatus(task.taskName)}>
+              {task.taskName}
+            </Text>
             <Text>
               Deadline: {task.date.toDateString()}{" "}
               {task.time.toLocaleTimeString()}
             </Text>
+            <Text>Status: {status[task.taskName]}</Text>
             <Text>
               Available slots:{" "}
               {calculateSlots(task.duration, previousTaskEndTime)}

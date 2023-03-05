@@ -45,6 +45,7 @@ const TasksScreen = () => {
   const updateStatus = (taskName) => {
     // logic to open a pop-up component for user to update task status
     // ...
+    //git check
     if (status[taskName] === "incomplete") {
       setStatus({ ...status, [taskName]: "complete" });
     } else if (status[taskName] === "complete") {
